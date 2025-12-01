@@ -10,20 +10,25 @@ def move_dial(input_lines, start_pos):
     print(f"Starting position: {pos}")
     count_zero = 0
     for item in input_lines:
+        print("---------------------------------------")
         dir, steps = item[:1], int(item[1:])
-        if dir == "L":
-            pos = pos - steps
-        if dir == "R":
-            pos = pos + steps
-        if pos > 99 or pos < 0:
-            pos = pos % 100
-        else:
-            pos = pos
+        for _ in range(steps):
+            if dir == "R":
+                pos += 1
+            if dir == "L":
+                pos -= 1
+            
+            if pos > 99:
+                pos = 0
+            if pos < 0:
+                pos = 99
+            
+            if pos == 0:
+                count_zero += 1
+
         print(f"Moving {dir} by {steps} steps to position {pos}")
-        if pos == 0:
-            count_zero += 1
-        if pos < 0 or pos > 99:
-            break
+        # print(f"Dial wrapped around, landed on 0 {temp} times")
+        print(f"Total count of times landed on 0 so far: {count_zero}")
     return count_zero
 
 
