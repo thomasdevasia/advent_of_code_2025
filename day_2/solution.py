@@ -26,8 +26,8 @@ def find_invalid(input_data: list[str]):
     return sum
 
 
-# input_data = read_input("input_test.txt")
-input_data = read_input("input.txt")
+input_data = read_input("input_test.txt")
+# input_data = read_input("input.txt")
 print(input_data)
 
 result = find_invalid(input_data)
