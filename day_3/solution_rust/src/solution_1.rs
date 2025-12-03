@@ -43,7 +43,7 @@ fn find_largest_joltage(input_data: &Vec<String>, battery_size: i32) -> Result<V
                 .map_err(|_| "Failed to parse integer result")?,
         );
     }
-    return Ok(results);
+    Ok(results)
 }
 
 fn sum_list(list_values: Vec<i64>) -> i64 {
