@@ -1,59 +1,74 @@
 # read input
-def read_input(file_path: str) -> list[str]:
+def read_input(file_path: str) -> list[list[str]]:
     results = []
     with open(file_path, "r") as f:
         for line in f:
-            results.append(line.removesuffix("\n"))
+            temp = [char for char in line]
+            temp.remove("\n")
+            results.append(temp)
     return results
 
 
-def calc_sum(input_data: list[str]) -> int:
-    result = 0
+def convert_operator_num(
+    input_data: list[list[str]],
+) -> tuple[list[list[int]], list[str]]:
+    len_x = len(input_data[0])
     len_y = len(input_data)
-    operators = input_data[len_y - 1].strip().split()
-    num_list = input_data[0 : len_y - 1]
-    len_y -= 1
-    # print(operators)
-    # print(num_list)
+    num = ""
+    operator_list = []
+    num_list = []
     temp_list = []
-    for line in num_list:
-        for i in range(len(line)):
-            # print(f"i: {i}, line[i]: {line[i]}")
-            if i < len(temp_list):
-                temp = temp_list[i]
-                temp += line[i]
-                temp_list[i] = temp
-            else:
-                temp = ""
-                temp += line[i]
-                temp_list.append(temp)
-    temp_list2 = []
-    for item in temp_list:
-        if item == " " * len(item):
-            continue
-        temp_list2.append(int(item.strip()))
-    # print(temp_list2)
-    for i in range(len(operators)):
-        start_pos = i * len_y
-        last_pos = start_pos + len_y
-        print(f"operator: {operators[i]}, list: {temp_list2[start_pos:last_pos]}")
-        if operators[i] == "+":
+    for x in range(len_x):
+        for y in range(len_y):
+            # print(f"X: {x}, Y: {y}")
+            if y == len_y - 1:
+                if input_data[y][x] == "+" or input_data[y][x] == "*":
+                    operator_list.append(input_data[y][x])
+                continue
+            num += input_data[y][x]
+            if y == len_y - 2:
+                temp = num.strip()
+                num = ""
+                if temp == "":
+                    num_list.append(temp_list)
+                    temp_list = []
+                elif x == len_x - 1:
+                    temp_list.append(int(temp))
+                    num_list.append(temp_list)
+                    temp_list = []
+                else:
+                    temp_list.append(int(temp))
+    # print(operator_list)
+    # print(num_list)
+    return num_list, operator_list
+
+
+def calculate_expression(num_list: list[list[int]], operator_list: list[str]) -> int:
+    total = 0
+    for i in range(len(num_list)):
+        if operator_list[i] == "+":
             temp = 0
         else:
             temp = 1
-        for digit in temp_list2[start_pos:last_pos]:
-            if operators[i] == "+":
-                temp += digit
-            if operators[i] == "*":
-                temp *= digit
-        result += temp
-    return result
+        for num in num_list[i]:
+            if operator_list[i] == "+":
+                temp += num
+            if operator_list[i] == "*":
+                temp *= num
+        # print(f"Operator: {operator_list[i]}, Numbers: {num_list[i]}, total: {temp}")
+        total += temp
+    return total
 
 
 # path = "./input_test.txt"
 path = "./input.txt"
 input_data = read_input(path)
 # print(input_data)
+# for line in input_data:
+#     print(line)
 
-result = calc_sum(input_data)
-print(f"result: {result}")
+num_list, operator_list = convert_operator_num(input_data)
+# print(num_list)
+
+result = calculate_expression(num_list, operator_list)
+print(f"Result: {result}")
