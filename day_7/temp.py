@@ -1,4 +1,4 @@
-from functools import cache
+import copy
 
 
 def read_input(filename: str) -> list[list[str]]:
@@ -25,22 +25,32 @@ def print_grid(grid: list[list[str]]) -> None:
     print("-----")
 
 
-@cache
-def move(x: int, y: int) -> int:
-    if y >= len(input_grid):
-        return 1
-    if input_grid[y][x] == "^":
-        return move(x - 1, y) + move(x + 1, y)
-    return move(x, y + 1)
+def move(grid: list[list[str]], x: int, y: int) -> None:
+    if y >= len(grid):
+        # print_grid(grid)
+        global count
+        count += 1
+        # print(f"Count: {count}")
+        return
+    if x < 0 or x >= len(grid[0]):
+        return
+    if grid[y][x] == "^":
+        move(copy.deepcopy(grid), x - 1, y)
+        move(copy.deepcopy(grid), x + 1, y)
+        return
+    elif grid[y][x] == ".":
+        grid[y][x] = "|"
+    move(copy.deepcopy(grid), x, y + 1)
 
 
 path = "input.txt"
 # path = "input_test.txt"
 input_grid = read_input(path)
-print_grid(input_grid)
+# print_grid(input_grid)
 
 start_pos = find_start(input_grid)
 # print(f"Start position: {start_pos}")
 
-result = move(start_pos[1], start_pos[0])
-print(f"Final Result: {result}")
+count = 0
+move(input_grid, start_pos[1], start_pos[0])
+print(f"Final count: {count}")

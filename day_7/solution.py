@@ -21,7 +21,7 @@ def print_grid(grid: list[list[str]]) -> None:
         print(line)
 
 
-def move(start_pos: list[list[str]], x: int, y: int) -> None:
+def move(grid: list[list[str]], x: int, y: int) -> None:
     new_y = y + 1
     # print_grid(grid)
     # print("len x:{len_x} len y:{len_y}".format(len_x=len(grid[0]), len_y=len(grid)))
@@ -52,17 +52,17 @@ def find_splits(grid: list[list[str]]) -> int:
     return count
 
 
-path = "input.txt"
-# path = "input_test.txt"
-grid = read_input(path)
+# path = "input.txt"
+path = "input_test.txt"
+input_grid = read_input(path)
 # print_grid(grid)
 
-start_pos = find_start(grid)
+start_pos = find_start(input_grid)
 # print(f"Start position: {start_pos}")
 
-move(grid, start_pos[1], start_pos[0])
-# print("final grid")
-# print_grid(grid)
+move(input_grid, start_pos[1], start_pos[0])
+print("final grid")
+print_grid(input_grid)
 
-result = find_splits(grid)
+result = find_splits(input_grid)
 print(f"Number of splits: {result}")
